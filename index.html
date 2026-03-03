@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ananda Gokhle — The Indigo Project</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='hsl(232,37%25,17%25)'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Georgia,serif' font-size='20' font-style='italic' fill='hsl(0,0%25,92%25)'%3EI%3C/text%3E%3C/svg%3E"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:hsl(232,37%,17%);
+      --bg2:hsl(233,40%,13%);
+      --fg:hsl(0,0%,95%);
+      --muted:hsl(233,34%,25%);
+      --muted-fg:hsl(233,15%,70%);
+      --serif:'Crimson Pro',serif;
+      --sans:'Inter',sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--bg);color:var(--fg);line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    ::selection{background:var(--muted);color:var(--fg)}
+    img{display:block;max-width:100%}
+    a{color:inherit;text-decoration:none}
+
+    /* ── NAV ── */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      padding:1rem 1.25rem;
+      display:flex;justify-content:space-between;align-items:center;
+      background:rgba(18,23,48,0.96);
+      backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,0.06);
+    }
+    .nav-brand{font-size:.72rem;letter-spacing:.2em;font-weight:500;text-transform:uppercase;opacity:.8}
+    /* hamburger — mobile only */
+    .nav-burger{
+      display:flex;flex-direction:column;gap:5px;
+      background:none;border:none;cursor:pointer;padding:4px;
+    }
+    .nav-burger span{display:block;width:22px;height:1.5px;background:var(--fg);opacity:.7;transition:all .3s}
+    .nav-burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+    .nav-burger.open span:nth-child(2){opacity:0}
+    .nav-burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+    /* desktop nav links — hidden on mobile */
+    .nav-links{display:none}
+
+    /* drawer */
+    .drawer{
+      position:fixed;top:0;right:0;bottom:0;width:260px;z-index:99;
+      background:var(--bg2);border-left:1px solid var(--muted);
+      padding:5rem 2rem 2rem;
+      transform:translateX(100%);transition:transform .3s ease;
+    }
+    .drawer.open{transform:translateX(0)}
+    .drawer a{
+      display:block;font-size:.7rem;letter-spacing:.25em;
+      text-transform:uppercase;opacity:.6;
+      padding:.9rem 0;border-bottom:1px solid rgba(255,255,255,.05);
+      transition:opacity .2s;
+    }
+    .drawer a:hover{opacity:1}
+    .drawer-overlay{
+      display:none;position:fixed;inset:0;z-index:98;background:rgba(0,0,0,.5);
+    }
+    .drawer-overlay.open{display:block}
+
+    /* ── HERO ── */
+    .hero{
+      padding:5rem 1.25rem 3rem;
+      display:flex;flex-direction:column;align-items:center;
+      gap:2rem;
+      animation:fadeUp .9s ease both;
+    }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+    .hero-cover{width:100%;max-width:260px;margin:0 auto}
+    .hero-cover img{width:100%;height:auto;box-shadow:0 20px 50px rgba(0,0,0,.6);border-radius:2px}
+    .hero-text{width:100%;text-align:center}
+    .hero h1{
+      font-family:var(--serif);font-size:1.75rem;font-style:italic;
+      font-weight:400;line-height:1.2;opacity:.9;letter-spacing:-.02em;
+      margin-bottom:1.5rem;
+    }
+
+
+    /* ── SECTIONS ── */
+    .section{padding:3rem 1.25rem}
+    .section-inner{width:100%}
+    .bg2{background:var(--bg2)}
+    .eyebrow{font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;opacity:.4;margin-bottom:1.25rem;display:block}
+
+    /* ── ABOUT ── */
+    .about-text h2{font-family:var(--serif);font-style:italic;font-size:1.6rem;font-weight:400;margin-bottom:1.25rem;line-height:1.2}
+    .about-text p{font-family:var(--serif);font-size:1rem;line-height:1.85;opacity:.88;margin-bottom:1rem}
+
+    /* ── FRAMEWORK PREVIEW ── */
+    .fw-link{display:block;cursor:pointer}
+    .fw-center{text-align:center;margin-bottom:1.75rem}
+    .fw-center h3{font-family:var(--serif);font-style:italic;font-size:1.6rem;font-weight:400;letter-spacing:-.02em;transition:opacity .3s}
+    .fw-link:hover .fw-center h3{opacity:.7}
+    .fw-imgbox{
+      background:var(--bg2);padding:1.5rem;
+      border:1px solid var(--muted);
+      box-shadow:0 16px 40px rgba(0,0,0,.4);
+      transition:filter .7s;
+    }
+    .fw-imgbox img{width:100%;height:auto;filter:invert(1) hue-rotate(180deg) brightness(.85) sepia(.2);transition:filter .7s}
+    .fw-link:hover .fw-imgbox img{filter:invert(1) hue-rotate(200deg) brightness(.9) sepia(.3)}
+    .fw-cta{text-align:center;margin-top:1.5rem}
+    .fw-cta span{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid var(--muted-fg);padding-bottom:3px;transition:border-color .3s}
+    .fw-link:hover .fw-cta span{border-color:var(--fg)}
+
+    /* ── SERIES ── */
+    .series-list{width:100%}
+    .s-item{
+      display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;
+      gap:.5rem 1rem;
+      border-bottom:1px solid var(--muted);padding-bottom:1.25rem;margin-bottom:0;
+    }
+    .s-item.dim{opacity:.5}
+    .s-left{display:flex;align-items:baseline;gap:.75rem;flex:1;min-width:0}
+    .s-num{font-size:.6rem;letter-spacing:.15em;opacity:.4;flex-shrink:0}
+    .s-title{font-family:var(--serif);font-style:italic;font-size:1.15rem;font-weight:400;line-height:1.25}
+    .s-status{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6;white-space:nowrap;flex-shrink:0}
+    .s-status.it{font-style:italic}
+
+    /* prologue */
+    .prologue-wrap{border-bottom:1px solid var(--muted);margin-bottom:1.5rem;overflow:hidden}
+    .prologue-toggle{
+      display:flex;align-items:center;gap:.6rem;width:100%;
+      font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+      color:var(--muted-fg);opacity:.6;cursor:pointer;
+      padding:1rem 0;background:none;border:none;
+      font-family:var(--sans);transition:opacity .2s;
+    }
+    .prologue-toggle:hover{opacity:1}
+    .prologue-toggle .arrow{display:inline-block;transition:transform .3s ease}
+    .prologue-toggle.open .arrow{transform:rotate(90deg)}
+    .prologue-card{max-height:0;overflow:hidden;transition:max-height .5s ease,opacity .4s ease;opacity:0}
+    .prologue-card.open{max-height:4000px;opacity:1}
+    .prologue-inner{background:var(--bg2);border:1px solid var(--muted);padding:1.5rem;margin-bottom:1.5rem}
+    .prologue-label{font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;opacity:.4;margin-bottom:1.25rem;display:block}
+    .prologue-text{font-family:var(--serif);font-size:1rem;line-height:1.9;opacity:.85;font-style:italic}
+    .prologue-text p+p{margin-top:1rem}
+
+    /* ── AUTHOR ── */
+    .author-photo{
+      width:100%;max-height:320px;object-fit:cover;object-position:center top;
+      display:block;filter:grayscale(.15);
+      border-bottom:1px solid var(--muted);
+    }
+    .author-body{padding:2rem 1.25rem}
+    .author-body h2{font-family:var(--serif);font-style:italic;font-size:1.8rem;font-weight:400;letter-spacing:-.02em;margin-bottom:.25rem}
+    .author-body .role{font-size:.75rem;opacity:.5;margin-bottom:1.25rem}
+    .author-body p{font-family:var(--serif);font-size:1rem;line-height:1.85;opacity:.78;margin-bottom:1rem}
+
+    /* ── FRAMEWORK PAGE ── */
+    .page-fw{display:none}.page-fw.active{display:block}
+    .page-home.hidden{display:none}
+    .fw-page{padding:5rem 1.25rem 3rem;animation:fadeUp .9s ease both}
+    .fw-hd{text-align:center;margin-bottom:2.5rem}
+    .fw-hd h1{font-family:var(--serif);font-size:1.8rem;font-weight:400;letter-spacing:-.02em;margin-bottom:1rem}
+    .fw-hd p{font-family:var(--serif);font-style:italic;font-size:1.05rem;opacity:.65;max-width:540px;margin:0 auto}
+    .fw-grid{display:flex;flex-direction:column;gap:2rem}
+    .fw-panel{background:var(--bg2);padding:1.5rem;border:1px solid var(--muted)}
+    .fw-panel img{width:100%;height:auto;filter:invert(1) hue-rotate(180deg) brightness(.85) sepia(.2);transition:filter .7s}
+    .fw-panel img:hover{filter:invert(1) hue-rotate(200deg) brightness(.9) sepia(.3)}
+    .fw-body p{font-family:var(--serif);font-size:1rem;line-height:1.85;opacity:.8;margin-bottom:1rem}
+    .fw-dims{border-top:1px solid var(--muted);padding-top:1.5rem;margin-top:1.5rem}
+    .fw-dim{display:flex;gap:1.25rem;margin-bottom:2rem;cursor:default}
+    .fw-letter{font-family:var(--serif);font-style:italic;font-size:2.2rem;font-weight:400;line-height:1;opacity:.4;transition:opacity .25s;flex-shrink:0;width:1.8rem;text-align:center}
+    .fw-dim:hover .fw-letter{opacity:1}
+    .fw-dname{font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;font-weight:500;margin-bottom:.2rem}
+    .fw-dtag{font-family:var(--serif);font-style:italic;font-size:.95rem;opacity:.6}
+
+    /* ── FOOTER ── */
+    footer{padding:1.75rem 1.25rem;border-top:1px solid rgba(255,255,255,.05);background:hsl(233,40%,11%);text-align:center}
+    footer p{font-size:.58rem;letter-spacing:.35em;text-transform:uppercase;opacity:.35}
+
+    /* ════════════════════════════
+       TABLET  ≥ 640px
+    ════════════════════════════ */
+    @media(min-width:640px){
+      nav{padding:1.1rem 2rem}
+      .hero{padding:5.5rem 2rem 3rem;flex-direction:row;align-items:center;gap:3rem;max-width:900px;margin:0 auto}
+      .hero-cover{max-width:280px;flex-shrink:0}
+      .hero-text{text-align:left}
+      .hero h1{font-size:2.2rem}
+      .hero-author{justify-content:flex-start}
+      .section{padding:4rem 2rem}
+      .about-text h2{font-size:2rem}
+      .fw-hd h1{font-size:2.2rem}
+      .fw-grid{flex-direction:row;align-items:start}
+      .fw-panel{flex:1}
+      .fw-body{flex:1}
+      .author-photo{max-height:420px}
+      .author-body{padding:2.5rem 2rem}
+      .author-body h2{font-size:2.2rem}
+    }
+
+    /* ════════════════════════════
+       DESKTOP  ≥ 960px
+    ════════════════════════════ */
+    @media(min-width:960px){
+      nav{padding:1.25rem 3rem}
+      .nav-burger{display:none}
+      .nav-links{
+        display:flex;gap:3rem;
+        font-size:.68rem;letter-spacing:.25em;font-weight:500;
+        text-transform:uppercase;opacity:.6;
+      }
+      .nav-links a{transition:opacity .2s}.nav-links a:hover{opacity:1}
+      .nav-links a.active{opacity:1;text-decoration:underline;text-underline-offset:8px}
+
+      .hero{padding:7rem 3rem 4rem;max-width:1280px;gap:5rem;min-height:100vh}
+      .hero-cover{max-width:380px}
+      .hero h1{font-size:clamp(2rem,3.5vw,3.5rem)}
+
+      .section{padding:6rem 3rem}
+      .section-inner{max-width:1100px;margin:0 auto}
+
+      .about-text{max-width:680px}
+      .about-text h2{font-size:2.4rem}
+      .about-text p{font-size:1.12rem}
+
+      .fw-imgbox{padding:2.5rem;max-width:680px;margin:0 auto}
+      .fw-center h3{font-size:clamp(2rem,3.5vw,3rem)}
+
+      .s-title{font-size:1.6rem}
+      .series-list{max-width:860px}
+
+      .prologue-inner{padding:2.5rem}
+      .prologue-text{font-size:1.1rem}
+
+      /* author side-by-side */
+      .author-section-inner{display:grid;grid-template-columns:340px 1fr;max-width:1100px;margin:0 auto}
+      .author-photo{max-height:100%;height:100%;object-fit:cover;border-bottom:none;border-right:1px solid var(--muted)}
+      .author-body{padding:4rem}
+      .author-body h2{font-size:2.8rem}
+      .author-body p{font-size:1.08rem}
+
+      .fw-page{padding:7rem 3rem 4rem;max-width:1100px;margin:0 auto}
+      .fw-hd h1{font-size:3rem}
+      .fw-grid{gap:4rem}
+    }
+  </style>
+</head>
+<body>
+
+<!-- HOME PAGE -->
+<div class="page-home" id="page-home">
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-brand">The Indigo Project</div>
+    <!-- desktop links -->
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#about">The Book</a>
+      <a href="#" onclick="showFw();return false;">The Framework</a>
+      <a href="#series">The Series</a>
+      <a href="#author">Author</a>
+    </div>
+    <!-- mobile burger -->
+    <button class="nav-burger" id="burger" onclick="toggleDrawer()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- DRAWER (mobile) -->
+  <div class="drawer-overlay" id="overlay" onclick="toggleDrawer()"></div>
+  <div class="drawer" id="drawer">
+    <a href="#home" onclick="closeDrawer()">Home</a>
+    <a href="#about" onclick="closeDrawer()">The Book</a>
+    <a href="#" onclick="closeDrawer();showFw();return false;">The Framework</a>
+    <a href="#series" onclick="closeDrawer()">The Series</a>
+    <a href="#author" onclick="closeDrawer()">Author</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="home">
+    <div class="hero">
+      <div class="hero-cover">
+        <img src="book-TIP-front_cover.jpg" alt="The Part No One Talks About"/>
+      </div>
+      <div class="hero-text">
+        <h1>INDIGO — from India to the world, one more time</h1>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section bg2">
+    <div class="section-inner">
+      <div class="about-text">
+        <span class="eyebrow">About the Book</span>
+        <h2>About the Book</h2>
+        <p>When Anna Bright steps into leadership at her family's lighting company, growth stops being optional. The business is stable, respected, and executing well—but expansion forces questions no one has had to answer before.</p>
+        <p>As Anna navigates scale, global teams, and inherited structures, she discovers that the hardest part of building a company isn't execution—it's designing the conditions that make execution possible.</p>
+        <p>The Part No One Talks About is a business parable about leadership, growth, and the quiet decisions that shape what organisations become.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FRAMEWORK PREVIEW -->
+  <section class="section">
+    <div class="section-inner">
+      <a class="fw-link" href="#" onclick="showFw();return false;">
+        <div class="fw-center">
+          <span class="eyebrow">The Leadership Framework</span>
+          <h3>Six Dimensions of Indigo</h3>
+        </div>
+        <div class="fw-imgbox">
+          <img src="TIP-pg-6dimension.jpg" alt="Six Dimensions of Indigo"/>
+        </div>
+        <div class="fw-cta"><span>Explore the Framework</span></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- SERIES -->
+  <section id="series" class="section" style="border-top:1px solid hsl(233,34%,25%)">
+    <div class="section-inner">
+      <span class="eyebrow">The Series</span>
+      <div class="series-list">
+
+        <div class="s-item">
+          <div class="s-left"><span class="s-num">01</span><span class="s-title">The Part No One Talks About</span></div>
+          <span class="s-status">Available</span>
+        </div>
+        <div class="prologue-wrap">
+          <button class="prologue-toggle" onclick="togglePrologue(this)">
+            <span class="arrow">&#x203A;</span> Read the Prologue
+          </button>
+          <div class="prologue-card">
+            <div class="prologue-inner">
+              <span class="prologue-label">Prologue — The Part No One Talks About</span>
+              <div class="prologue-text">
+                <p>Anna Bright was observant. She always noticed the moments beneath the surface just before a move was made: the pause between locking the front door and turning around to leave for a long trip, the brief stillness before an aircraft pushed back from the gate. These were moments when memory surfaced without a prompt.</p>
+                <p>The airport road stretched out beside her, all overpasses and exits she was familiar with. By this point, she had driven through it countless times for routine trips, conferences, board meetings. But somehow, this journey felt different. This one didn't let her drift into a power nap like it usually did on her way to the airport. By the time the sun rose again, she would be crossing continents to establish Brightworks' Global Tech Center in India. A sentence she had rehearsed in countless meetings now felt oddly personal to her.</p>
+                <p>She thought about how improbable this moment once seemed, not that long ago. Barely two years ago, she had returned to Portland with hesitation, carrying a fear of disappointing her father. Brightworks had not started as a tech-enabled company. It had been vastly a brick-and-mortar, albeit large, light store — solid, dependable, physical; warehouses, inventory, long-established processes built for predictability and stability. When her father first spoke about software as a core capability, rather than just a support function, she had gone into a moment of thoughtful quiet.</p>
+                <p>Transformations, to her, always sound elegant in retrospect. Living through one, and seeing it through, was messier. She had often pushed for systems before people were ready, for change before comfort loosened its grip. She had learned to sit with resistance without mistaking it for rejection.</p>
+                <p>Hesitation had been her constant companion in those early few months; doubt intermingled with something subtler. The awareness that if she was wrong, the consequences would be unavoidable, measurable, and personal. She had learned to move forward anyway.</p>
+                <p>A couple of hours later, the plane leveled off, the cabin lights dimmed, and India drew closer in her mind, as well as in distance. A new office. A new set of expectations layered atop existing ones. The same team, but an additional entity that was now her responsibility. The challenges ahead were already lining up: culture, distance, trust, time zones, decisions made without hallway conversations. She knew that no slide deck ever captured the human cost of building something from scratch.</p>
+                <p>Her thoughts returned, as they often did whenever she was pondering the company and the scaling, to Pundit. He was a man who didn't announce influence; he applied it. In moments when she felt the pressure to justify every instinct, he had asked simpler questions, stripping the doubts away. What problem were they really solving? Who needed to trust whom? What could wait, and what could not?</p>
+                <p>He had a way of making complexity feel navigable without diminishing it. There had been conversations they had that changed the direction of entire initiatives: a pause before a decision, a reminder to listen longer, a sense of confidence that steadied her when her momentum felt fragile. He didn't claim credit, and perhaps because of that, his presence was firmer than most people's.</p>
+                <p>As the plane crossed into higher skies, Anna realized that this journey had not been just about opening an office. It was about carrying forward everything she had learned the hard way: that transformation is less about technology than conviction, less about structure than trust. That leadership is often exercised in the background, and progress does not announce itself in the most obvious ways when it finally arrives.</p>
+                <p>India was not a destination on a map anymore. It was the next chapter. She closed her eyes, not just to rest, but to hold this moment in her mind.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="s-item dim">
+          <div class="s-left"><span class="s-num">02</span><span class="s-title">The Job Without a Manual</span></div>
+          <span class="s-status it">Late Summer 2026</span>
+        </div>
+        <div class="prologue-wrap" style="opacity:.5">
+          <button class="prologue-toggle" onclick="togglePrologue(this)">
+            <span class="arrow">&#x203A;</span> Read the Prologue
+          </button>
+          <div class="prologue-card">
+            <div class="prologue-inner">
+              <span class="prologue-label">Prologue &mdash; The Job Without a Manual</span>
+              <div class="prologue-text">
+                <p>Ravi was getting ready for the BrightWorks office opening party. It was a short drive from home, factoring the traffic. He got into the car, the old Hindi film songs playing, but his mind went back to an early conversation with Pundit in his office.</p>
+                <p>&ldquo;Being a site lead is not easy, Ravi,&rdquo; Pundit said, crossing his legs. &ldquo;There is surely glamour attached to it &mdash; you will be at NASSCOM and other events, and the visibility will be great.&rdquo;</p>
+                <p>Ravi adjusted his posture, intent on listening.</p>
+                <p>Pundit continued, &ldquo;If you look closely, the ecosystem does not allow new people to come on board and be successful.&rdquo;</p>
+                <p>Ravi nodded. He had seen a few of his peers move around the block, performing the same job duties in almost all the same companies. &ldquo;Why do you think that happens?&rdquo; he asked. &ldquo;Is it intentional?&rdquo;</p>
+                <p>Pundit paused briefly. &ldquo;There are quite a few reasons in my opinion &mdash; job insecurity, not many players who have helped set up the centre, and no structured capability building.&rdquo;</p>
+                <p>&ldquo;This role is evolving,&rdquo; Pundit said. &ldquo;Organisations started looking east to control cost and to some extent the team dynamics. That was a few decades back &mdash; like when I started working for the hedge fund, there was absolute control on all of us.&rdquo;</p>
+                <p>His eyes closed, as if imagining those days, and he drifted into memory lane. Ravi waited patiently. He knew Pundit to be a person of immense leadership experience who had suffered for his ahead-of-the-market thinking. When almost a minute had passed, Ravi smiled and said, &ldquo;You still awake, or should I get a pillow?&rdquo;</p>
+                <p>Pundit smiled, removed his glasses and rubbed his eyes. &ldquo;More organisations moved in,&rdquo; he continued. &ldquo;The leaders grew in number, restless for meaningful work. But the voices were more noise than movement, and in pockets.&rdquo;</p>
+                <p>&ldquo;That added more demand organically, but the supply of leaders was less?&rdquo; Ravi said.</p>
+                <p>&ldquo;Exactly. And qualified leaders, or the ecosystem to qualify them &mdash; did not exist. It still does not exist, in my opinion.&rdquo;</p>
+                <p>Pundit continued, &ldquo;Then the world got hit with the pandemic. However difficult it was, we humans, and most importantly the engineers, endured and evolved. We were able to deliver super quality work from home, among constraints we were never exposed to.&rdquo;</p>
+                <p>&ldquo;Yes,&rdquo; Ravi said. &ldquo;The distance, timezones, and any other perceived or otherwise existing barriers were just gone. Poof &mdash; like flour getting dusted off.&rdquo;</p>
+                <p>&ldquo;Correct,&rdquo; Pundit said. &ldquo;Monotonous work triggered the hunger for more ownership. Leaders like yourself were younger, and there was a generational shift in the ways of working.&rdquo;</p>
+                <p>Pundit looked sharply at Ravi. &ldquo;This generation, your generation of leaders, wants ownership. They want to feel happy with the work they are doing. Not just survive at work.&rdquo;</p>
+                <p>&ldquo;This leader &mdash; you, Ravi &mdash; needs to work across cultures, continents, timezones. Think global, act local, the most abused term in our industry. How much pressure can one person absorb? Add to that a lesser budget than a VP in his own organisation, a functional report to someone in the US or UK, parallel structures, and people in the home country worried about job security, subconsciously holding back information.&rdquo;</p>
+                <p>&ldquo;Where does this site lead go for cover?&rdquo; Pundit said. &ldquo;This person always feels vulnerable. And then add the VP in his own geography constantly wanting the site lead role &mdash; until he gets there and realises he is not ready for it.&rdquo;</p>
+                <p>Ravi asked thoughtfully, &ldquo;It almost feels like you are discounting the numerous leaders India has produced.&rdquo;</p>
+                <p>Pundit paused, choosing his words carefully. &ldquo;We are blessed to have great leaders and managers. However, for this new industry and this job role, we need much more.&rdquo;</p>
+                <p>Ravi stared right back at Pundit. &ldquo;So you are saying this job has no manual.&rdquo;</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="s-item dim">
+          <div class="s-left"><span class="s-num">03</span><span class="s-title">The Indiscipline of Growth <span style="font-size:.8rem;opacity:.5;font-style:normal;">(tentative)</span></span></div>
+          <span class="s-status it">Forthcoming</span>
+        </div>
+        <div class="prologue-wrap" style="opacity:.5">
+          <button class="prologue-toggle" onclick="togglePrologue(this)">
+            <span class="arrow">&#x203A;</span> Read the Prologue
+          </button>
+          <div class="prologue-card">
+            <div class="prologue-inner">
+              <span class="prologue-label">Prologue &mdash; The Indiscipline of Growth</span>
+              <div class="prologue-text">
+                <p>This book will be about how teams can be successful using the INDIGO framework.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTHOR -->
+  <section id="author" class="bg2">
+    <div class="author-section-inner">
+      <img class="author-photo" src="book-TIP-backcover.jpg" alt="Ananda Gokhle"/>
+      <div class="author-body">
+        <span class="eyebrow">Author</span>
+        <h2>Ananda Gokhle</h2>
+        <p class="role">Founder, ArisTuring Technologies Inc</p>
+        <p>Ananda Gokhle is the founder of ArisTuring Technologies Inc and a technology leader with years of experience building and scaling global engineering teams. He has worked closely with Founders, CEOs, and senior executives to design and operate India-based technology organisations for companies across the US and Europe.</p>
+        <p>Having scaled teams from zero to hundreds of engineers, Ananda's work spans technology strategy, leadership, and cross-cultural execution. His perspective is grounded in lived experience—where structure, trust, incentives, and people shape outcomes as much as systems and code.</p>
+        <p>As a practitioner-author, he uses narrative to examine the decisions and quiet inflection points leaders face while building globally, with a focus on creating organisations that endure.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer><p>© <span id="yr1"></span> Ananda Gokhle. All rights reserved.</p></footer>
+</div>
+
+<!-- FRAMEWORK PAGE -->
+<div class="page-fw" id="page-fw">
+  <nav>
+    <a class="nav-brand" href="#" onclick="showHome();return false;">The Indigo Project</a>
+    <div class="nav-links">
+      <a href="#" onclick="showHome();return false;">Home</a>
+      <a href="#" onclick="showHome();return false;">The Book</a>
+      <a href="#" class="active">The Framework</a>
+      <a href="#" onclick="showHome('series');return false;">The Series</a>
+      <a href="#" onclick="showHome('author');return false;">Author</a>
+    </div>
+    <button class="nav-burger" id="burger2" onclick="toggleDrawer2()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="drawer-overlay" id="overlay2" onclick="toggleDrawer2()"></div>
+  <div class="drawer" id="drawer2">
+    <a href="#" onclick="closeDrawer2();showHome();return false;">Home</a>
+    <a href="#" onclick="closeDrawer2();showHome();return false;">The Book</a>
+    <a href="#" class="active">The Framework</a>
+    <a href="#" onclick="closeDrawer2();showHome('series');return false;">The Series</a>
+    <a href="#" onclick="closeDrawer2();showHome('author');return false;">Author</a>
+  </div>
+
+  <div class="fw-page">
+    <div class="fw-hd">
+      <h1>Six Dimensions of Indigo</h1>
+      <p>Leadership framework for growing and scaling technology teams</p>
+    </div>
+    <div class="fw-grid">
+      <div class="fw-panel">
+        <img src="TIP-pg-6dimension.jpg" alt="Six Dimensions of Indigo"/>
+      </div>
+      <div class="fw-body">
+        <p>A structured way to think about expansion as size, scope, complexity, and geographical distance increase. As technology teams grow, outcomes are shaped less by proximity and direct oversight, and more by structure, leadership behaviour, and how work moves across boundaries.</p>
+        <p>INDIGO is not a sequence or checklist. Leaders often encounter these dimensions simultaneously and revisit them as teams evolve. INDIGO provides language and structure to engage growth with clarity rather than reaction.</p>
+        <div class="fw-dims">
+          <div class="fw-dim"><div class="fw-letter">I</div><div><div class="fw-dname">Identify</div><div class="fw-dtag">Seeing what is actually happening.</div></div></div>
+          <div class="fw-dim"><div class="fw-letter">N</div><div><div class="fw-dname">Navigate</div><div class="fw-dtag">Moving through resistance.</div></div></div>
+          <div class="fw-dim"><div class="fw-letter">D</div><div><div class="fw-dname">Design</div><div class="fw-dtag">How intent becomes structure.</div></div></div>
+          <div class="fw-dim"><div class="fw-letter">I</div><div><div class="fw-dname">Internalise</div><div class="fw-dtag">When direction becomes belief.</div></div></div>
+          <div class="fw-dim"><div class="fw-letter">G</div><div><div class="fw-dname">Govern</div><div class="fw-dtag">What preserves coherence.</div></div></div>
+          <div class="fw-dim"><div class="fw-letter">O</div><div><div class="fw-dname">Ownership</div><div class="fw-dtag">Holding accountability.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer><p>© <span id="yr2"></span> Ananda Gokhle. All rights reserved.</p></footer>
+</div>
+
+<script>
+  document.getElementById('yr1').textContent = new Date().getFullYear();
+  document.getElementById('yr2').textContent = new Date().getFullYear();
+
+  function togglePrologue(btn){
+    btn.classList.toggle('open');
+    btn.nextElementSibling.classList.toggle('open');
+  }
+  function toggleDrawer(){
+    document.getElementById('burger').classList.toggle('open');
+    document.getElementById('drawer').classList.toggle('open');
+    document.getElementById('overlay').classList.toggle('open');
+  }
+  function closeDrawer(){
+    document.getElementById('burger').classList.remove('open');
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+  }
+  function toggleDrawer2(){
+    document.getElementById('burger2').classList.toggle('open');
+    document.getElementById('drawer2').classList.toggle('open');
+    document.getElementById('overlay2').classList.toggle('open');
+  }
+  function closeDrawer2(){
+    document.getElementById('burger2').classList.remove('open');
+    document.getElementById('drawer2').classList.remove('open');
+    document.getElementById('overlay2').classList.remove('open');
+  }
+  function showFw(){
+    document.getElementById('page-home').classList.add('hidden');
+    document.getElementById('page-fw').classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function showHome(anchor){
+    document.getElementById('page-fw').classList.remove('active');
+    document.getElementById('page-home').classList.remove('hidden');
+    if(anchor){
+      setTimeout(function(){var el=document.getElementById(anchor);if(el)el.scrollIntoView({behavior:'smooth'});},50);
+    } else {
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+  }
+</script>
+</body>
+</html>
